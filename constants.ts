@@ -3,7 +3,7 @@ import { ProfileData } from "./types";
 export const PROFILE: ProfileData = {
   name: "Ashwini Prajapati",
   title: "Technology Lead",
-  profilePicture: "assets/profile_picture.jpg",
+  profilePicture: "/assets/profile_picture.jpg",
   email: "ash1011995@gmail.com",
   phone: "+91 9925913139",
   location: "Vadodara, Gujarat, India",
