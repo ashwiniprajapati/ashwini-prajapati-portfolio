@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,6 +18,7 @@
             --xp-login-bg: #5a7edc;
             --xp-login-bars: linear-gradient(to bottom, #003399 0%, #0055e5 10%, #0055e5 90%, #003399 100%);
             --xp-start-right-bg: #d3e5fa;
+            --xp-logoff-gradient: linear-gradient(to bottom, #4b73d4 0%, #2e5ac8 100%);
         }
         body {
             font-family: 'Tahoma', 'Inter', sans-serif;
@@ -47,10 +47,11 @@
             min-height: 80px;
             background: var(--xp-login-bars);
             width: 100%;
+            position: relative;
         }
-        .xp-login-top { border-bottom: 2px solid rgba(255,255,255,0.3); }
+        .xp-login-top { border-bottom: 2px solid rgba(255,255,255,0.4); }
         .xp-login-bottom { 
-            border-top: 2px solid rgba(255,255,255,0.3); 
+            border-top: 2px solid rgba(255,255,255,0.4); 
             display: flex; 
             align-items: center; 
             padding: 0 40px;
@@ -63,12 +64,94 @@
             align-items: center;
             justify-content: center;
             background-color: var(--xp-login-bg);
+            box-shadow: inset 0 20px 20px -20px rgba(0,0,0,0.5), inset 0 -20px 20px -20px rgba(0,0,0,0.5);
         }
         .xp-login-divider {
-            width: 1px;
-            height: 60%;
-            background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.5), transparent);
-            margin: 0 60px;
+            width: 2px;
+            height: 70%;
+            background: linear-gradient(to bottom, transparent 0%, rgba(255,255,255,0.6) 50%, transparent 100%);
+            margin: 0 40px;
+        }
+
+        /* Log Off Dialog */
+        .xp-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0,0,0,0.4);
+            backdrop-filter: grayscale(100%) brightness(50%);
+            z-index: 20000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .xp-logoff-box {
+            width: 320px;
+            background: #003399;
+            border: 1px solid #ffffff;
+            box-shadow: 4px 4px 10px rgba(0,0,0,0.5);
+            color: white;
+            display: flex;
+            flex-direction: column;
+        }
+        .xp-logoff-header {
+            padding: 10px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+            font-size: 14px;
+            background: linear-gradient(to right, #003399, #0055e5);
+        }
+        .xp-logoff-body {
+            background: var(--xp-logoff-gradient);
+            padding: 20px;
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-start;
+            border-top: 1px solid rgba(255,255,255,0.3);
+            border-bottom: 1px solid rgba(255,255,255,0.3);
+        }
+        .xp-logoff-option {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            gap: 10px;
+            width: 100px;
+        }
+        .xp-logoff-icon-btn {
+            width: 38px;
+            height: 38px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #ffffff;
+            box-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            transition: transform 0.1s;
+        }
+        .xp-logoff-option:hover .xp-logoff-icon-btn { transform: scale(1.05); filter: brightness(1.2); }
+        .xp-logoff-icon-btn.switch { background: linear-gradient(to bottom, #72a3f2, #245edb); }
+        .xp-logoff-icon-btn.logoff { background: linear-gradient(to bottom, #f9bb4d, #d18d00); }
+        .xp-logoff-option span { font-size: 11px; font-weight: bold; text-align: center; }
+
+        .xp-logoff-footer {
+            padding: 8px 15px;
+            background: #003399;
+            display: flex;
+            justify-content: flex-end;
+        }
+        .xp-cancel-btn {
+            background: #ece9d8;
+            color: black;
+            border: 1px solid #003399;
+            padding: 2px 12px;
+            font-size: 11px;
+            border-radius: 3px;
+            cursor: pointer;
         }
 
         /* Desktop and Taskbar */
@@ -238,11 +321,9 @@
   }
 }
 </script>
-<link rel="stylesheet" href="/index.css">
 </head>
 <body>
     <div id="root"></div>
-    <!-- Explicit module import for Vite and deployment environments -->
     <script type="module" src="/index.tsx"></script>
 </body>
 </html>

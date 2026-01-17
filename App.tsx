@@ -180,44 +180,51 @@ const LoginScreen: React.FC<{ onLogin: () => void }> = ({ onLogin }) => {
       <div className="xp-login-bar xp-login-top"></div>
 
       <div className="xp-login-middle">
-        <div className="flex flex-col items-end justify-center select-none text-right">
-          <div className="flex items-center gap-3 mb-1">
-            <div className="flex flex-col leading-none">
-              <div className="flex gap-1 mb-1">
-                <div className="w-4 h-4 rounded-sm bg-[#f44336] shadow-sm"></div>
-                <div className="w-4 h-4 rounded-sm bg-[#4caf50] shadow-sm"></div>
+        <div className="flex flex-col items-center select-none w-1/2">
+          <div className="flex flex-col items-center">
+            <div className="flex gap-2 mb-4">
+              <div className="w-8 h-8 rounded-sm bg-[#f44336] shadow-md border border-white/20"></div>
+              <div className="w-8 h-8 rounded-sm bg-[#4caf50] shadow-md border border-white/20"></div>
+            </div>
+            <div className="flex gap-2 -mt-2">
+              <div className="w-8 h-8 rounded-sm bg-[#2196f3] shadow-md border border-white/20"></div>
+              <div className="w-8 h-8 rounded-sm bg-[#ffeb3b] shadow-md border border-white/20"></div>
+            </div>
+            <div className="mt-4 flex flex-col items-center">
+              <div className="text-white text-5xl font-bold xp-logo-text italic tracking-tighter">
+                Microsoft
               </div>
-              <div className="flex gap-1">
-                <div className="w-4 h-4 rounded-sm bg-[#2196f3] shadow-sm"></div>
-                <div className="w-4 h-4 rounded-sm bg-[#ffeb3b] shadow-sm"></div>
+              <div className="text-white text-4xl font-bold flex items-baseline leading-none mt-1">
+                Windows{" "}
+                <span className="text-xl font-normal ml-2 italic opacity-80">
+                  xp
+                </span>
               </div>
             </div>
-            <div className="text-white text-5xl font-bold xp-logo-text italic tracking-tighter">
-              Microsoft
-            </div>
-          </div>
-          <div className="text-white text-4xl font-bold flex items-baseline leading-none">
-            Windows{" "}
-            <span className="text-xl font-normal ml-2 italic opacity-80">
-              xp
-            </span>
-          </div>
-          <div className="h-[2px] w-56 bg-gradient-to-r from-transparent via-orange-400 to-transparent mt-3"></div>
-          <div className="text-white/60 text-[10px] mt-1 font-bold tracking-widest uppercase">
-            Professional
           </div>
         </div>
 
         <div className="xp-login-divider"></div>
 
-        <div className="flex flex-col min-w-[280px]">
-          <div className="text-white italic text-lg mb-6 font-medium">
+        <div className="flex flex-col w-1/2 pl-10">
+          <div className="text-white italic text-lg mb-8 font-medium shadow-sm">
             To begin, click your user name
           </div>
-          <div className="xp-login-user-card" onClick={onLogin}>
-            <img src={PROFILE.profilePicture} alt={PROFILE.name} />
+          <div
+            className="xp-login-user-card group max-w-[280px]"
+            onClick={onLogin}
+          >
+            <div className="relative mr-4">
+              <img
+                src={PROFILE.profilePicture}
+                alt={PROFILE.name}
+                className="w-[56px] h-[56px] object-cover rounded-md border-2 border-white shadow-lg group-hover:brightness-110"
+              />
+            </div>
             <div className="flex flex-col">
-              <span className="xp-login-user-name">{PROFILE.name}</span>
+              <span className="xp-login-user-name group-hover:text-blue-200">
+                {PROFILE.name}
+              </span>
               <span className="text-white opacity-80 text-xs">Logged Off</span>
             </div>
           </div>
@@ -231,9 +238,46 @@ const LoginScreen: React.FC<{ onLogin: () => void }> = ({ onLogin }) => {
           </div>
           <span className="text-sm font-bold shadow-sm">Turn off computer</span>
         </div>
-        <div className="text-white opacity-50 text-[11px] italic max-w-[240px] text-right leading-tight">
+        <div className="text-white opacity-70 text-[11px] italic max-w-[260px] text-right leading-tight">
           After you log on, you can add or change accounts. Just go to Control
           Panel and click User Accounts.
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// --- Log Off Dialog ---
+
+const LogOffDialog: React.FC<{
+  onCancel: () => void;
+  onLogOff: () => void;
+}> = ({ onCancel, onLogOff }) => {
+  return (
+    <div className="xp-overlay">
+      <div className="xp-logoff-box">
+        <div className="xp-logoff-header">
+          <span>Log Off Windows</span>
+          <i className="fab fa-windows text-white text-lg"></i>
+        </div>
+        <div className="xp-logoff-body">
+          <div className="xp-logoff-option" onClick={onCancel}>
+            <div className="xp-logoff-icon-btn switch">
+              <i className="fas fa-users text-white text-xl"></i>
+            </div>
+            <span>Switch User</span>
+          </div>
+          <div className="xp-logoff-option" onClick={onLogOff}>
+            <div className="xp-logoff-icon-btn logoff">
+              <i className="fas fa-sign-out-alt text-white text-xl"></i>
+            </div>
+            <span>Log Off</span>
+          </div>
+        </div>
+        <div className="xp-logoff-footer">
+          <button className="xp-cancel-btn" onClick={onCancel}>
+            Cancel
+          </button>
         </div>
       </div>
     </div>
@@ -244,6 +288,7 @@ const LoginScreen: React.FC<{ onLogin: () => void }> = ({ onLogin }) => {
 
 const App: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLogOffDialogOpen, setIsLogOffDialogOpen] = useState(false);
   const [openWindows, setOpenWindows] = useState<string[]>(["about"]);
   const [minimizedWindows, setMinimizedWindows] = useState<string[]>([]);
   const [maximizedWindows, setMaximizedWindows] = useState<string[]>([]);
@@ -278,8 +323,9 @@ const App: React.FC = () => {
     setIsLoggedIn(true);
   };
 
-  const handleLogOff = () => {
+  const handleActualLogOff = () => {
     setIsLoggedIn(false);
+    setIsLogOffDialogOpen(false);
     setOpenWindows(["about"]);
     setMinimizedWindows([]);
     setMaximizedWindows([]);
@@ -427,8 +473,8 @@ const App: React.FC = () => {
               <div className="flex flex-col sm:flex-row items-center gap-6 mb-8 text-center sm:text-left">
                 <img
                   src={PROFILE.profilePicture}
-                  alt={PROFILE.name}
-                  className="w-24 h-24 rounded-full border-4 border-blue-500 shadow-lg"
+                  className="w-24 h-24 rounded-full border-4 border-blue-500 shadow-lg object-cover"
+                  alt="Profile"
                 />
                 <div>
                   <h1 className="text-3xl font-bold text-slate-800 tracking-tight">
@@ -617,14 +663,22 @@ const App: React.FC = () => {
         </div>
       </div>
 
+      {/* Log Off Overlay */}
+      {isLogOffDialogOpen && (
+        <LogOffDialog
+          onCancel={() => setIsLogOffDialogOpen(false)}
+          onLogOff={handleActualLogOff}
+        />
+      )}
+
       {/* Start Menu */}
       {isStartMenuOpen && (
         <div className="xp-start-menu">
           <div className="xp-start-header">
             <img
               src={PROFILE.profilePicture}
-              alt={PROFILE.name}
-              className="w-9 h-9 rounded-sm border-2 border-white/80 mr-3 shadow-sm"
+              className="w-10 h-10 rounded-sm border-2 border-white/80 mr-3 shadow-sm object-cover"
+              alt="Avatar"
             />
             <span className="font-bold text-white text-sm shadow-md">
               {PROFILE.name}
@@ -670,7 +724,10 @@ const App: React.FC = () => {
           </div>
           <div className="xp-start-footer">
             <button
-              onClick={handleLogOff}
+              onClick={() => {
+                setIsLogOffDialogOpen(true);
+                setIsStartMenuOpen(false);
+              }}
               className="flex items-center text-xs text-white font-bold hover:brightness-125 px-2"
             >
               <i className="fas fa-key mr-2 text-orange-400"></i> Log Off
