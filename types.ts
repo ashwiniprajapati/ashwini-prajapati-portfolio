@@ -1,4 +1,3 @@
-
 export interface Experience {
   role: string;
   company: string;
@@ -25,6 +24,7 @@ export interface Certification {
 export interface ProfileData {
   name: string;
   title: string;
+  profilePicture: string;
   email: string;
   phone: string;
   location: string;

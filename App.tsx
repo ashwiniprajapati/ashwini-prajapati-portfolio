@@ -1,28 +1,25 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { PROFILE } from './constants';
-import { Experience, Project, SkillCategory } from './types';
+import React, { useState, useEffect, useRef, useCallback } from "react";
+import { PROFILE } from "./constants";
+import { Experience, Project, SkillCategory } from "./types";
 
 // --- Components ---
 
-const TaskbarIcon: React.FC<{ 
-  id: string; 
-  title: string; 
-  icon: string; 
+const TaskbarIcon: React.FC<{
+  id: string;
+  title: string;
+  icon: string;
   isActive: boolean;
   onClick: () => void;
 }> = ({ id, title, icon, isActive, onClick }) => (
-  <div 
-    onClick={onClick}
-    className={`taskbar-item ${isActive ? 'active' : ''}`}
-  >
+  <div onClick={onClick} className={`taskbar-item ${isActive ? "active" : ""}`}>
     <i className={`${icon} mr-2`}></i>
     <span className="truncate">{title}</span>
   </div>
 );
 
-const DesktopIcon: React.FC<{ 
-  title: string; 
-  icon: string; 
+const DesktopIcon: React.FC<{
+  title: string;
+  icon: string;
   onClick: () => void;
 }> = ({ title, icon, onClick }) => (
   <div className="desktop-icon" onDoubleClick={onClick} onClick={onClick}>
@@ -50,9 +47,21 @@ interface WindowProps {
   onDrag: (id: string, x: number, y: number) => void;
 }
 
-const Window: React.FC<WindowProps> = ({ 
-  id, title, icon, isOpen, isMinimized, isMaximized, 
-  onClose, onMinimize, onMaximize, children, zIndex, onClick, position, onDrag
+const Window: React.FC<WindowProps> = ({
+  id,
+  title,
+  icon,
+  isOpen,
+  isMinimized,
+  isMaximized,
+  onClose,
+  onMinimize,
+  onMaximize,
+  children,
+  zIndex,
+  onClick,
+  position,
+  onDrag,
 }) => {
   const [isDragging, setIsDragging] = useState(false);
   const dragOffset = useRef({ x: 0, y: 0 });
@@ -63,14 +72,18 @@ const Window: React.FC<WindowProps> = ({
     setIsDragging(true);
     dragOffset.current = {
       x: e.clientX - position.x,
-      y: e.clientY - position.y
+      y: e.clientY - position.y,
     };
   };
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       if (!isDragging) return;
-      onDrag(id, e.clientX - dragOffset.current.x, e.clientY - dragOffset.current.y);
+      onDrag(
+        id,
+        e.clientX - dragOffset.current.x,
+        e.clientY - dragOffset.current.y,
+      );
     };
 
     const handleMouseUp = () => {
@@ -78,42 +91,42 @@ const Window: React.FC<WindowProps> = ({
     };
 
     if (isDragging) {
-      window.addEventListener('mousemove', handleMouseMove);
-      window.addEventListener('mouseup', handleMouseUp);
+      window.addEventListener("mousemove", handleMouseMove);
+      window.addEventListener("mouseup", handleMouseUp);
     }
 
     return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('mouseup', handleMouseUp);
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mouseup", handleMouseUp);
     };
   }, [isDragging, id, onDrag]);
 
   if (!isOpen || isMinimized) return null;
 
-  const style: React.CSSProperties = isMaximized 
+  const style: React.CSSProperties = isMaximized
     ? {
         zIndex,
         top: 0,
         left: 0,
-        width: '100%',
-        height: 'calc(100vh - 30px)',
-        position: 'absolute',
+        width: "100%",
+        height: "calc(100vh - 30px)",
+        position: "absolute",
         borderRadius: 0,
-        borderWidth: '1px'
+        borderWidth: "1px",
       }
     : {
         zIndex,
         top: position.y,
         left: position.x,
-        width: '70%',
-        height: '70%',
-        position: 'absolute'
+        width: "70%",
+        height: "70%",
+        position: "absolute",
       };
 
   return (
     <div className="xp-window flex flex-col" style={style} onClick={onClick}>
-      <div 
-        className="xp-window-titlebar cursor-default select-none" 
+      <div
+        className="xp-window-titlebar cursor-default select-none"
         onMouseDown={handleMouseDown}
       >
         <div className="flex items-center overflow-hidden pointer-events-none">
@@ -121,11 +134,33 @@ const Window: React.FC<WindowProps> = ({
           <span className="truncate">{title}</span>
         </div>
         <div className="xp-window-controls flex-shrink-0">
-          <div className="xp-btn xp-btn-min" onClick={(e) => { e.stopPropagation(); onMinimize(); }}>_</div>
-          <div className="xp-btn xp-btn-max" onClick={(e) => { e.stopPropagation(); onMaximize(); }}>
-            {isMaximized ? '❐' : '□'}
+          <div
+            className="xp-btn xp-btn-min"
+            onClick={(e) => {
+              e.stopPropagation();
+              onMinimize();
+            }}
+          >
+            _
           </div>
-          <div className="xp-btn xp-btn-close" onClick={(e) => { e.stopPropagation(); onClose(); }}>✕</div>
+          <div
+            className="xp-btn xp-btn-max"
+            onClick={(e) => {
+              e.stopPropagation();
+              onMaximize();
+            }}
+          >
+            {isMaximized ? "❐" : "□"}
+          </div>
+          <div
+            className="xp-btn xp-btn-close"
+            onClick={(e) => {
+              e.stopPropagation();
+              onClose();
+            }}
+          >
+            ✕
+          </div>
         </div>
       </div>
       <div className="xp-window-content flex-1 overflow-hidden">
@@ -143,37 +178,44 @@ const LoginScreen: React.FC<{ onLogin: () => void }> = ({ onLogin }) => {
   return (
     <div className="xp-login-screen">
       <div className="xp-login-bar xp-login-top"></div>
-      
+
       <div className="xp-login-middle">
         <div className="flex flex-col items-end justify-center select-none text-right">
           <div className="flex items-center gap-3 mb-1">
-             <div className="flex flex-col leading-none">
-                <div className="flex gap-1 mb-1">
-                  <div className="w-4 h-4 rounded-sm bg-[#f44336] shadow-sm"></div>
-                  <div className="w-4 h-4 rounded-sm bg-[#4caf50] shadow-sm"></div>
-                </div>
-                <div className="flex gap-1">
-                  <div className="w-4 h-4 rounded-sm bg-[#2196f3] shadow-sm"></div>
-                  <div className="w-4 h-4 rounded-sm bg-[#ffeb3b] shadow-sm"></div>
-                </div>
-             </div>
-             <div className="text-white text-5xl font-bold xp-logo-text italic tracking-tighter">
-                Microsoft
-             </div>
+            <div className="flex flex-col leading-none">
+              <div className="flex gap-1 mb-1">
+                <div className="w-4 h-4 rounded-sm bg-[#f44336] shadow-sm"></div>
+                <div className="w-4 h-4 rounded-sm bg-[#4caf50] shadow-sm"></div>
+              </div>
+              <div className="flex gap-1">
+                <div className="w-4 h-4 rounded-sm bg-[#2196f3] shadow-sm"></div>
+                <div className="w-4 h-4 rounded-sm bg-[#ffeb3b] shadow-sm"></div>
+              </div>
+            </div>
+            <div className="text-white text-5xl font-bold xp-logo-text italic tracking-tighter">
+              Microsoft
+            </div>
           </div>
           <div className="text-white text-4xl font-bold flex items-baseline leading-none">
-            Windows <span className="text-xl font-normal ml-2 italic opacity-80">xp</span>
+            Windows{" "}
+            <span className="text-xl font-normal ml-2 italic opacity-80">
+              xp
+            </span>
           </div>
           <div className="h-[2px] w-56 bg-gradient-to-r from-transparent via-orange-400 to-transparent mt-3"></div>
-          <div className="text-white/60 text-[10px] mt-1 font-bold tracking-widest uppercase">Professional</div>
+          <div className="text-white/60 text-[10px] mt-1 font-bold tracking-widest uppercase">
+            Professional
+          </div>
         </div>
-        
+
         <div className="xp-login-divider"></div>
 
         <div className="flex flex-col min-w-[280px]">
-          <div className="text-white italic text-lg mb-6 font-medium">To begin, click your user name</div>
+          <div className="text-white italic text-lg mb-6 font-medium">
+            To begin, click your user name
+          </div>
           <div className="xp-login-user-card" onClick={onLogin}>
-            <img src="https://picsum.photos/id/101/100/100" alt="Ashwini" />
+            <img src={PROFILE.profilePicture} alt={PROFILE.name} />
             <div className="flex flex-col">
               <span className="xp-login-user-name">{PROFILE.name}</span>
               <span className="text-white opacity-80 text-xs">Logged Off</span>
@@ -181,16 +223,17 @@ const LoginScreen: React.FC<{ onLogin: () => void }> = ({ onLogin }) => {
           </div>
         </div>
       </div>
-      
+
       <div className="xp-login-bar xp-login-bottom">
         <div className="flex items-center group cursor-pointer text-white">
           <div className="w-8 h-8 rounded-lg bg-[#cc0000] flex items-center justify-center mr-3 group-hover:bg-[#ff0000] shadow-md border border-white/20">
-             <i className="fas fa-power-off text-sm"></i>
+            <i className="fas fa-power-off text-sm"></i>
           </div>
           <span className="text-sm font-bold shadow-sm">Turn off computer</span>
         </div>
         <div className="text-white opacity-50 text-[11px] italic max-w-[240px] text-right leading-tight">
-          After you log on, you can add or change accounts. Just go to Control Panel and click User Accounts.
+          After you log on, you can add or change accounts. Just go to Control
+          Panel and click User Accounts.
         </div>
       </div>
     </div>
@@ -201,19 +244,21 @@ const LoginScreen: React.FC<{ onLogin: () => void }> = ({ onLogin }) => {
 
 const App: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [openWindows, setOpenWindows] = useState<string[]>(['about']);
+  const [openWindows, setOpenWindows] = useState<string[]>(["about"]);
   const [minimizedWindows, setMinimizedWindows] = useState<string[]>([]);
   const [maximizedWindows, setMaximizedWindows] = useState<string[]>([]);
-  const [activeWindow, setActiveWindow] = useState<string>('about');
+  const [activeWindow, setActiveWindow] = useState<string>("about");
   const [isStartMenuOpen, setIsStartMenuOpen] = useState(false);
   const [time, setTime] = useState(new Date());
-  
-  const [windowPositions, setWindowPositions] = useState<Record<string, { x: number; y: number }>>({
+
+  const [windowPositions, setWindowPositions] = useState<
+    Record<string, { x: number; y: number }>
+  >({
     about: { x: 100, y: 50 },
     experience: { x: 130, y: 80 },
     skills: { x: 160, y: 110 },
     projects: { x: 190, y: 140 },
-    contact: { x: 220, y: 170 }
+    contact: { x: 220, y: 170 },
   });
 
   const [zIndices, setZIndices] = useState<Record<string, number>>({
@@ -221,7 +266,7 @@ const App: React.FC = () => {
     experience: 1,
     skills: 1,
     projects: 1,
-    contact: 1
+    contact: 1,
   });
 
   useEffect(() => {
@@ -235,23 +280,23 @@ const App: React.FC = () => {
 
   const handleLogOff = () => {
     setIsLoggedIn(false);
-    setOpenWindows(['about']);
+    setOpenWindows(["about"]);
     setMinimizedWindows([]);
     setMaximizedWindows([]);
-    setActiveWindow('about');
+    setActiveWindow("about");
     setZIndices({
       about: 10,
       experience: 1,
       skills: 1,
       projects: 1,
-      contact: 1
+      contact: 1,
     });
     setWindowPositions({
       about: { x: 100, y: 50 },
       experience: { x: 130, y: 80 },
       skills: { x: 160, y: 110 },
       projects: { x: 190, y: 140 },
-      contact: { x: 220, y: 170 }
+      contact: { x: 220, y: 170 },
     });
     setIsStartMenuOpen(false);
   };
@@ -261,40 +306,42 @@ const App: React.FC = () => {
       setOpenWindows([...openWindows, id]);
     }
     if (minimizedWindows.includes(id)) {
-      setMinimizedWindows(minimizedWindows.filter(w => w !== id));
+      setMinimizedWindows(minimizedWindows.filter((w) => w !== id));
     }
     focusWindow(id);
     setIsStartMenuOpen(false);
   };
 
   const closeWindow = (id: string) => {
-    setOpenWindows(openWindows.filter(w => w !== id));
-    setMinimizedWindows(minimizedWindows.filter(w => w !== id));
-    setMaximizedWindows(maximizedWindows.filter(w => w !== id));
+    setOpenWindows(openWindows.filter((w) => w !== id));
+    setMinimizedWindows(minimizedWindows.filter((w) => w !== id));
+    setMaximizedWindows(maximizedWindows.filter((w) => w !== id));
     if (activeWindow === id) {
-      const remaining = openWindows.filter(w => w !== id);
-      setActiveWindow(remaining[remaining.length - 1] || '');
+      const remaining = openWindows.filter((w) => w !== id);
+      setActiveWindow(remaining[remaining.length - 1] || "");
     }
   };
 
   const toggleMinimize = (id: string) => {
     if (minimizedWindows.includes(id)) {
-      setMinimizedWindows(minimizedWindows.filter(w => w !== id));
+      setMinimizedWindows(minimizedWindows.filter((w) => w !== id));
       focusWindow(id);
     } else {
       setMinimizedWindows([...minimizedWindows, id]);
-      const remaining = openWindows.filter(w => w !== id && !minimizedWindows.includes(w));
+      const remaining = openWindows.filter(
+        (w) => w !== id && !minimizedWindows.includes(w),
+      );
       if (remaining.length > 0) {
         focusWindow(remaining[remaining.length - 1]);
       } else {
-        setActiveWindow('');
+        setActiveWindow("");
       }
     }
   };
 
   const toggleMaximize = (id: string) => {
     if (maximizedWindows.includes(id)) {
-      setMaximizedWindows(maximizedWindows.filter(w => w !== id));
+      setMaximizedWindows(maximizedWindows.filter((w) => w !== id));
     } else {
       setMaximizedWindows([...maximizedWindows, id]);
     }
@@ -303,14 +350,14 @@ const App: React.FC = () => {
 
   const focusWindow = (id: string) => {
     const maxZ = Math.max(...Object.values(zIndices), 10);
-    setZIndices(prev => ({ ...prev, [id]: maxZ + 1 }));
+    setZIndices((prev) => ({ ...prev, [id]: maxZ + 1 }));
     setActiveWindow(id);
   };
 
   const handleWindowDrag = useCallback((id: string, x: number, y: number) => {
-    setWindowPositions(prev => ({
+    setWindowPositions((prev) => ({
       ...prev,
-      [id]: { x, y }
+      [id]: { x, y },
     }));
   }, []);
 
@@ -324,14 +371,17 @@ const App: React.FC = () => {
 
   const toggleStartMenu = () => setIsStartMenuOpen(!isStartMenuOpen);
 
-  const formattedTime = time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  const formattedTime = time.toLocaleTimeString([], {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
 
   const windows = [
-    { id: 'about', title: 'My Profile', icon: 'fas fa-user' },
-    { id: 'experience', title: 'Work History', icon: 'fas fa-briefcase' },
-    { id: 'skills', title: 'Technical Skills', icon: 'fas fa-tools' },
-    { id: 'projects', title: 'Recent Projects', icon: 'fas fa-code-branch' },
-    { id: 'contact', title: 'Contact Ashwini', icon: 'fas fa-envelope' },
+    { id: "about", title: "My Profile", icon: "fas fa-user" },
+    { id: "experience", title: "Work History", icon: "fas fa-briefcase" },
+    { id: "skills", title: "Technical Skills", icon: "fas fa-tools" },
+    { id: "projects", title: "Recent Projects", icon: "fas fa-code-branch" },
+    { id: "contact", title: "Contact Ashwini", icon: "fas fa-envelope" },
   ];
 
   if (!isLoggedIn) {
@@ -342,23 +392,25 @@ const App: React.FC = () => {
     <div className="xp-desktop overflow-hidden">
       {/* Desktop Icons */}
       <div className="flex flex-col h-full p-4 flex-wrap content-start">
-        {windows.map(win => (
-          <DesktopIcon 
+        {windows.map((win) => (
+          <DesktopIcon
             key={win.id}
-            title={win.title} 
-            icon={win.icon} 
+            title={win.title}
+            icon={win.icon}
             onClick={() => openWindow(win.id)}
           />
         ))}
       </div>
 
       {/* Windows Content */}
-      {windows.map(win => (
-        <Window 
+      {windows.map((win) => (
+        <Window
           key={win.id}
-          id={win.id} 
-          title={win.id === 'about' ? `My Profile - ${PROFILE.name}` : win.title} 
-          icon={win.icon} 
+          id={win.id}
+          title={
+            win.id === "about" ? `My Profile - ${PROFILE.name}` : win.title
+          }
+          icon={win.icon}
           isOpen={openWindows.includes(win.id)}
           isMinimized={minimizedWindows.includes(win.id)}
           isMaximized={maximizedWindows.includes(win.id)}
@@ -370,58 +422,91 @@ const App: React.FC = () => {
           position={windowPositions[win.id]}
           onDrag={handleWindowDrag}
         >
-          {win.id === 'about' && (
+          {win.id === "about" && (
             <div className="max-w-3xl">
               <div className="flex flex-col sm:flex-row items-center gap-6 mb-8 text-center sm:text-left">
-                <img src="https://picsum.photos/id/101/150/150" className="w-24 h-24 rounded-full border-4 border-blue-500 shadow-lg" alt="Profile" />
+                <img
+                  src={PROFILE.profilePicture}
+                  alt={PROFILE.name}
+                  className="w-24 h-24 rounded-full border-4 border-blue-500 shadow-lg"
+                />
                 <div>
-                  <h1 className="text-3xl font-bold text-slate-800 tracking-tight">{PROFILE.name}</h1>
-                  <p className="text-xl text-blue-600 font-semibold">{PROFILE.title}</p>
-                  <p className="text-slate-500 mt-2 font-medium"><i className="fas fa-map-marker-alt mr-2 text-red-500"></i>{PROFILE.location}</p>
+                  <h1 className="text-3xl font-bold text-slate-800 tracking-tight">
+                    {PROFILE.name}
+                  </h1>
+                  <p className="text-xl text-blue-600 font-semibold">
+                    {PROFILE.title}
+                  </p>
+                  <p className="text-slate-500 mt-2 font-medium">
+                    <i className="fas fa-map-marker-alt mr-2 text-red-500"></i>
+                    {PROFILE.location}
+                  </p>
                 </div>
               </div>
-              <h2 className="text-xl font-bold border-b-2 border-slate-200 pb-2 mb-4 text-slate-800">Professional Summary</h2>
-              <p className="text-slate-600 leading-relaxed mb-8">{PROFILE.summary}</p>
-              
-              <h2 className="text-xl font-bold border-b-2 border-slate-200 pb-2 mb-4 text-slate-800">Education</h2>
+              <h2 className="text-xl font-bold border-b-2 border-slate-200 pb-2 mb-4 text-slate-800">
+                Professional Summary
+              </h2>
+              <p className="text-slate-600 leading-relaxed mb-8">
+                {PROFILE.summary}
+              </p>
+
+              <h2 className="text-xl font-bold border-b-2 border-slate-200 pb-2 mb-4 text-slate-800">
+                Education
+              </h2>
               <div className="bg-slate-50 p-4 rounded-lg border border-slate-200">
-                <h3 className="font-bold text-slate-800">{PROFILE.education.degree}</h3>
-                <p className="text-sm text-slate-500 font-medium">{PROFILE.education.institution} | {PROFILE.education.period}</p>
+                <h3 className="font-bold text-slate-800">
+                  {PROFILE.education.degree}
+                </h3>
+                <p className="text-sm text-slate-500 font-medium">
+                  {PROFILE.education.institution} | {PROFILE.education.period}
+                </p>
                 <div className="inline-block bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-bold mt-2">
                   {PROFILE.education.score}
                 </div>
               </div>
             </div>
           )}
-          {win.id === 'experience' && (
+          {win.id === "experience" && (
             <div className="space-y-8">
               {PROFILE.experiences.map((exp, idx) => (
                 <div key={idx} className="border-l-4 border-blue-500 pl-4 py-1">
                   <div className="flex justify-between items-start mb-1">
-                    <h3 className="text-lg font-bold text-slate-800">{exp.role}</h3>
-                    <span className="text-xs font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded border border-blue-100">{exp.period}</span>
+                    <h3 className="text-lg font-bold text-slate-800">
+                      {exp.role}
+                    </h3>
+                    <span className="text-xs font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded border border-blue-100">
+                      {exp.period}
+                    </span>
                   </div>
                   <p className="text-blue-700 font-bold mb-3">{exp.company}</p>
                   <ul className="list-disc list-inside text-slate-600 text-sm space-y-2">
-                    {exp.highlights.map((h, i) => <li key={i}>{h}</li>)}
+                    {exp.highlights.map((h, i) => (
+                      <li key={i}>{h}</li>
+                    ))}
                   </ul>
                 </div>
               ))}
             </div>
           )}
-          {win.id === 'skills' && (
+          {win.id === "skills" && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {PROFILE.skills.map((cat, idx) => (
-                <div key={idx} className="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                <div
+                  key={idx}
+                  className="bg-slate-50 p-4 rounded-xl border border-slate-200"
+                >
                   <h3 className="font-bold text-slate-800 mb-4 flex items-center">
                     <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center mr-2">
-                       <i className="fas fa-tools text-blue-600 text-xs"></i>
+                      <i className="fas fa-tools text-blue-600 text-xs"></i>
                     </div>
                     {cat.category}
                   </h3>
                   <div className="flex flex-wrap gap-2">
                     {cat.skills.map((s, i) => (
-                      <span key={i} className="bg-white border border-slate-300 px-3 py-1 rounded text-xs text-slate-700 font-bold shadow-sm">
+                      <span
+                        key={i}
+                        className="bg-white border border-slate-300 px-3 py-1 rounded text-xs text-slate-700 font-bold shadow-sm"
+                      >
                         {s}
                       </span>
                     ))}
@@ -430,41 +515,69 @@ const App: React.FC = () => {
               ))}
             </div>
           )}
-          {win.id === 'projects' && (
+          {win.id === "projects" && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {PROFILE.projects.map((proj, idx) => (
-                <div key={idx} className="bg-white border border-slate-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow group">
+                <div
+                  key={idx}
+                  className="bg-white border border-slate-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow group"
+                >
                   <div className="h-32 bg-slate-100 flex items-center justify-center text-5xl text-slate-300 transition-transform group-hover:scale-105">
                     <i className="fas fa-laptop-code"></i>
                   </div>
                   <div className="p-4">
-                    <h3 className="font-bold text-lg mb-2 text-slate-800">{proj.title}</h3>
-                    <p className="text-xs text-slate-500 mb-4 line-clamp-3 leading-relaxed">{proj.description}</p>
+                    <h3 className="font-bold text-lg mb-2 text-slate-800">
+                      {proj.title}
+                    </h3>
+                    <p className="text-xs text-slate-500 mb-4 line-clamp-3 leading-relaxed">
+                      {proj.description}
+                    </p>
                     <div className="flex flex-wrap gap-1">
-                      {proj.techUsed.map((t, i) => <span key={i} className="text-[10px] bg-blue-600 text-white px-2 py-0.5 rounded-full font-bold">{t}</span>)}
+                      {proj.techUsed.map((t, i) => (
+                        <span
+                          key={i}
+                          className="text-[10px] bg-blue-600 text-white px-2 py-0.5 rounded-full font-bold"
+                        >
+                          {t}
+                        </span>
+                      ))}
                     </div>
                   </div>
                 </div>
               ))}
             </div>
           )}
-          {win.id === 'contact' && (
+          {win.id === "contact" && (
             <div className="text-center py-10">
               <div className="w-24 h-24 bg-gradient-to-br from-blue-500 to-blue-700 text-white rounded-full flex items-center justify-center mx-auto mb-8 text-4xl shadow-xl ring-4 ring-blue-50">
                 <i className="fas fa-paper-plane"></i>
               </div>
-              <h2 className="text-3xl font-bold mb-4 text-slate-800">Let's Connect!</h2>
+              <h2 className="text-3xl font-bold mb-4 text-slate-800">
+                Let's Connect!
+              </h2>
               <p className="text-slate-500 mb-10 max-w-md mx-auto px-4 font-medium">
                 I'm currently open for new opportunities and collaborations.
               </p>
               <div className="space-y-4 max-w-sm mx-auto px-4">
-                <a href={`mailto:${PROFILE.email}`} className="flex items-center justify-center w-full bg-blue-600 text-white py-4 rounded-xl font-bold hover:bg-blue-700 transition-all shadow-lg active:scale-95 px-4 overflow-hidden">
-                  <i className="fas fa-envelope mr-3"></i> <span className="truncate">{PROFILE.email}</span>
+                <a
+                  href={`mailto:${PROFILE.email}`}
+                  className="flex items-center justify-center w-full bg-blue-600 text-white py-4 rounded-xl font-bold hover:bg-blue-700 transition-all shadow-lg active:scale-95 px-4 overflow-hidden"
+                >
+                  <i className="fas fa-envelope mr-3"></i>{" "}
+                  <span className="truncate">{PROFILE.email}</span>
                 </a>
-                <a href={`tel:${PROFILE.phone.replace(/\s+/g, '')}`} className="flex items-center justify-center w-full border-2 border-slate-200 text-slate-700 py-4 rounded-xl font-bold hover:bg-slate-50 transition-all active:scale-95">
+                <a
+                  href={`tel:${PROFILE.phone.replace(/\s+/g, "")}`}
+                  className="flex items-center justify-center w-full border-2 border-slate-200 text-slate-700 py-4 rounded-xl font-bold hover:bg-slate-50 transition-all active:scale-95"
+                >
                   <i className="fas fa-phone mr-3"></i> {PROFILE.phone}
                 </a>
-                <a href={`https://${PROFILE.linkedin}`} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center w-full bg-[#0077b5] text-white py-4 rounded-xl font-bold hover:brightness-110 transition-all shadow-lg active:scale-95">
+                <a
+                  href={`https://${PROFILE.linkedin}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center w-full bg-[#0077b5] text-white py-4 rounded-xl font-bold hover:brightness-110 transition-all shadow-lg active:scale-95"
+                >
                   <i className="fab fa-linkedin mr-3"></i> LinkedIn
                 </a>
               </div>
@@ -479,16 +592,16 @@ const App: React.FC = () => {
           <i className="fab fa-windows mr-2 text-xl shadow-sm"></i>
           start
         </div>
-        
+
         <div className="flex-1 flex px-2 gap-1 overflow-x-auto scrollbar-hide">
-          {openWindows.map(id => {
-            const win = windows.find(w => w.id === id);
+          {openWindows.map((id) => {
+            const win = windows.find((w) => w.id === id);
             return win ? (
-              <TaskbarIcon 
-                key={id} 
-                id={id} 
-                title={win.title} 
-                icon={win.icon} 
+              <TaskbarIcon
+                key={id}
+                id={id}
+                title={win.title}
+                icon={win.icon}
                 isActive={activeWindow === id && !minimizedWindows.includes(id)}
                 onClick={() => handleTaskbarClick(id)}
               />
@@ -498,7 +611,9 @@ const App: React.FC = () => {
 
         <div className="xp-system-tray pr-3">
           <i className="fas fa-volume-up mr-3 opacity-70 hidden sm:inline text-xs text-white"></i>
-          <span className="font-bold text-[11px] tracking-tight text-white">{formattedTime}</span>
+          <span className="font-bold text-[11px] tracking-tight text-white">
+            {formattedTime}
+          </span>
         </div>
       </div>
 
@@ -506,13 +621,23 @@ const App: React.FC = () => {
       {isStartMenuOpen && (
         <div className="xp-start-menu">
           <div className="xp-start-header">
-            <img src="https://picsum.photos/id/101/40/40" className="w-9 h-9 rounded-sm border-2 border-white/80 mr-3 shadow-sm" alt="Avatar" />
-            <span className="font-bold text-white text-sm shadow-md">{PROFILE.name}</span>
+            <img
+              src={PROFILE.profilePicture}
+              alt={PROFILE.name}
+              className="w-9 h-9 rounded-sm border-2 border-white/80 mr-3 shadow-sm"
+            />
+            <span className="font-bold text-white text-sm shadow-md">
+              {PROFILE.name}
+            </span>
           </div>
           <div className="xp-start-body">
             <div className="xp-start-left">
-              {windows.map(win => (
-                <div key={win.id} className="start-item" onClick={() => openWindow(win.id)}>
+              {windows.map((win) => (
+                <div
+                  key={win.id}
+                  className="start-item"
+                  onClick={() => openWindow(win.id)}
+                >
                   <div className="w-7 h-7 flex items-center justify-center mr-3 text-blue-600 text-lg">
                     <i className={win.icon}></i>
                   </div>
@@ -527,7 +652,9 @@ const App: React.FC = () => {
               </div>
             </div>
             <div className="xp-start-right">
-              <div className="start-item" onClick={() => openWindow('about')}>My Documents</div>
+              <div className="start-item" onClick={() => openWindow("about")}>
+                My Documents
+              </div>
               <div className="start-item">My Recent Documents</div>
               <div className="start-item">My Pictures</div>
               <div className="start-item">My Music</div>
@@ -542,16 +669,15 @@ const App: React.FC = () => {
             </div>
           </div>
           <div className="xp-start-footer">
-            <button 
+            <button
               onClick={handleLogOff}
               className="flex items-center text-xs text-white font-bold hover:brightness-125 px-2"
             >
               <i className="fas fa-key mr-2 text-orange-400"></i> Log Off
             </button>
-            <button 
-              className="flex items-center text-xs text-white font-bold hover:brightness-125 px-2"
-            >
-              <i className="fas fa-power-off mr-2 text-red-500"></i> Turn Off Computer
+            <button className="flex items-center text-xs text-white font-bold hover:brightness-125 px-2">
+              <i className="fas fa-power-off mr-2 text-red-500"></i> Turn Off
+              Computer
             </button>
           </div>
         </div>
