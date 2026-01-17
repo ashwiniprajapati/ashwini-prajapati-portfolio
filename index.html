@@ -29,6 +29,7 @@
             width: 100vw;
             background: black;
             user-select: none;
+            touch-action: manipulation;
         }
 
         /* Authentic XP Login Screen */
@@ -202,8 +203,8 @@
             box-shadow: 5px 5px 15px rgba(0,0,0,0.3);
             display: flex;
             flex-direction: column;
-            min-width: 400px;
-            min-height: 300px;
+            min-width: 300px;
+            min-height: 200px;
         }
         .xp-window-titlebar {
             background: var(--xp-window-title);
@@ -229,17 +230,17 @@
         .xp-btn-min, .xp-btn-max { background: linear-gradient(to bottom, #6fa1f2 0%, #1e56b4 100%); }
 
         .desktop-icon {
-            display: flex; flex-direction: column; align-items: center; width: 85px; margin: 15px;
-            cursor: pointer; color: white; text-shadow: 1px 1px 2px black; font-size: 11px; text-align: center;
+            display: flex; flex-direction: column; align-items: center; width: 75px; margin: 10px;
+            cursor: pointer; color: white; text-shadow: 1px 1px 2px black; font-size: 10px; text-align: center;
         }
         .icon-img {
             width: 32px; height: 32px; margin-bottom: 5px; display: flex; align-items: center;
-            justify-content: center; background: rgba(255,255,255,0.05); border-radius: 4px; font-size: 26px;
+            justify-content: center; background: rgba(255,255,255,0.05); border-radius: 4px; font-size: 24px;
         }
 
         /* Authentic Start Menu */
         .xp-start-menu {
-            position: fixed; bottom: 30px; left: 0; width: 380px; background: white;
+            position: fixed; bottom: 30px; left: 0; width: 380px; max-width: 100vw; background: white;
             border-top-left-radius: 6px; border-top-right-radius: 6px;
             box-shadow: 2px -2px 15px rgba(0,0,0,0.4); display: flex; flex-direction: column;
             z-index: 10000; border: 1px solid #0055ff; border-bottom: none;
@@ -293,8 +294,8 @@
 
         .taskbar-item {
             background: #3a82f7; border: 1px solid #0046d5; color: white; height: 24px;
-            padding: 0 10px; margin-left: 5px; border-radius: 2px; display: flex; align-items: center;
-            font-size: 11px; min-width: 100px; max-width: 160px; cursor: pointer;
+            padding: 0 8px; margin-left: 5px; border-radius: 2px; display: flex; align-items: center;
+            font-size: 10px; min-width: 30px; max-width: 160px; cursor: pointer;
             box-shadow: inset 0 1px 1px rgba(255,255,255,0.3);
         }
         .taskbar-item.active { background: #1d5299; box-shadow: inset 0 0 5px rgba(0,0,0,0.5); border-color: #163a6b; }
@@ -309,6 +310,57 @@
         
         .xp-logo-text { font-family: 'Tahoma', sans-serif; font-weight: bold; }
         .scrollbar-hide::-webkit-scrollbar { display: none; }
+
+        /* Responsive Overrides */
+        @media (max-width: 768px) {
+            .xp-login-middle {
+                flex-direction: column;
+                padding: 20px;
+            }
+            .xp-login-divider {
+                display: none;
+            }
+            .xp-login-middle > div {
+                width: 100% !important;
+                padding-left: 0 !important;
+                align-items: center;
+                text-align: center;
+            }
+            .xp-login-user-card {
+                margin: 0 auto;
+            }
+            .xp-login-bottom {
+                padding: 0 20px;
+            }
+            .xp-login-bottom > div:last-child {
+                display: none;
+            }
+            .desktop-icon {
+                width: 70px;
+                margin: 5px;
+            }
+            .xp-start-menu {
+                width: 100vw;
+            }
+            .xp-start-right {
+                display: none;
+            }
+            .taskbar-item span {
+                display: none; /* Only show icons on small mobile taskbar */
+            }
+            .taskbar-item i {
+                margin-right: 0 !important;
+            }
+            .xp-window {
+                border-width: 1px !important;
+            }
+            .xp-window-titlebar {
+                height: 35px; /* Larger titlebar for touch */
+            }
+            .xp-btn {
+                width: 28px; height: 28px;
+            }
+        }
     </style>
 <script type="importmap">
 {
