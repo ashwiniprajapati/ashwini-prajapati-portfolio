@@ -1,0 +1,248 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ashwini Prajapati | Technology Lead</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tahoma&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --xp-blue: #245edb;
+            --xp-taskbar: linear-gradient(to bottom, #245edb 0%, #3f8cf3 9%, #245edb 18%, #245edb 92%, #1941a5 100%);
+            --xp-start-btn: linear-gradient(to bottom, #388d38 0%, #4cb84c 4%, #398e39 6%, #277b27 92%, #1d5b1d 100%);
+            --xp-window-title: linear-gradient(to bottom, #0058e6 0%, #3a93ff 8%, #288eff 14%, #0051ee 41%, #0051ee 81%, #0046d5 88%, #002db1 93%, #002db1 100%);
+            --xp-login-bg: #5a7edc;
+            --xp-login-bars: linear-gradient(to bottom, #003399 0%, #0055e5 10%, #0055e5 90%, #003399 100%);
+            --xp-start-right-bg: #d3e5fa;
+        }
+        body {
+            font-family: 'Tahoma', 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+            background: black;
+            user-select: none;
+        }
+
+        /* Authentic XP Login Screen */
+        .xp-login-screen {
+            background-color: var(--xp-login-bg);
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            z-index: 100;
+        }
+        .xp-login-bar {
+            height: 12%;
+            min-height: 80px;
+            background: var(--xp-login-bars);
+            width: 100%;
+        }
+        .xp-login-top { border-bottom: 2px solid rgba(255,255,255,0.3); }
+        .xp-login-bottom { 
+            border-top: 2px solid rgba(255,255,255,0.3); 
+            display: flex; 
+            align-items: center; 
+            padding: 0 40px;
+            justify-content: space-between;
+        }
+
+        .xp-login-middle {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--xp-login-bg);
+        }
+        .xp-login-divider {
+            width: 1px;
+            height: 60%;
+            background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.5), transparent);
+            margin: 0 60px;
+        }
+
+        /* Desktop and Taskbar */
+        .xp-desktop {
+            background-image: url('https://images.unsplash.com/photo-1544376798-89aa6b82c6cd?auto=format&fit=crop&q=80&w=2000');
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            width: 100vw;
+            position: relative;
+        }
+        .xp-taskbar {
+            background: var(--xp-taskbar);
+            height: 30px;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            align-items: center;
+            z-index: 9999;
+            box-shadow: inset 0 1px 1px rgba(255,255,255,0.3);
+        }
+        .xp-start-button {
+            background: var(--xp-start-btn);
+            height: 100%;
+            padding: 0 15px;
+            display: flex;
+            align-items: center;
+            color: white;
+            font-weight: bold;
+            font-style: italic;
+            border-top-right-radius: 10px;
+            border-bottom-right-radius: 10px;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.3);
+            cursor: pointer;
+            text-shadow: 1px 1px 1px rgba(0,0,0,0.5);
+            font-size: 15px;
+        }
+        .xp-start-button:hover { filter: brightness(1.1); }
+
+        .xp-window {
+            position: absolute;
+            background: #ece9d8;
+            border: 3px solid var(--xp-blue);
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+            box-shadow: 5px 5px 15px rgba(0,0,0,0.3);
+            display: flex;
+            flex-direction: column;
+            min-width: 400px;
+            min-height: 300px;
+        }
+        .xp-window-titlebar {
+            background: var(--xp-window-title);
+            height: 28px;
+            padding: 0 5px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: white;
+            font-weight: bold;
+            font-size: 13px;
+            text-shadow: 1px 1px 1px rgba(0,0,0,0.5);
+            cursor: default;
+        }
+        .xp-window-controls { display: flex; gap: 2px; }
+        .xp-btn {
+            width: 21px; height: 21px; border: 1px solid white; border-radius: 3px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 11px; cursor: pointer; box-shadow: inset 0 0 2px rgba(0,0,0,0.5);
+        }
+        .xp-btn-close { background: linear-gradient(to bottom, #e46e50 0%, #d13a16 100%); }
+        .xp-btn-close:hover { background: #ff0000; }
+        .xp-btn-min, .xp-btn-max { background: linear-gradient(to bottom, #6fa1f2 0%, #1e56b4 100%); }
+
+        .desktop-icon {
+            display: flex; flex-direction: column; align-items: center; width: 85px; margin: 15px;
+            cursor: pointer; color: white; text-shadow: 1px 1px 2px black; font-size: 11px; text-align: center;
+        }
+        .icon-img {
+            width: 32px; height: 32px; margin-bottom: 5px; display: flex; align-items: center;
+            justify-content: center; background: rgba(255,255,255,0.05); border-radius: 4px; font-size: 26px;
+        }
+
+        /* Authentic Start Menu */
+        .xp-start-menu {
+            position: fixed; bottom: 30px; left: 0; width: 380px; background: white;
+            border-top-left-radius: 6px; border-top-right-radius: 6px;
+            box-shadow: 2px -2px 15px rgba(0,0,0,0.4); display: flex; flex-direction: column;
+            z-index: 10000; border: 1px solid #0055ff; border-bottom: none;
+            overflow: hidden;
+        }
+        .xp-start-header { 
+            background: var(--xp-window-title); 
+            height: 55px; 
+            display: flex; 
+            align-items: center; 
+            padding: 0 10px; 
+            color: white; 
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+        }
+        .xp-start-body {
+            display: flex;
+            background: white;
+        }
+        .xp-start-left {
+            flex: 1;
+            padding: 10px 0;
+            background: white;
+        }
+        .xp-start-right {
+            width: 160px;
+            padding: 10px 0;
+            background: var(--xp-start-right-bg);
+            border-left: 1px solid #91b0df;
+        }
+        .start-item { 
+            display: flex; 
+            align-items: center; 
+            padding: 5px 12px; 
+            cursor: pointer; 
+            font-size: 11px; 
+            color: #333; 
+        }
+        .xp-start-left .start-item:hover { background: #2f71cd; color: white; }
+        .xp-start-right .start-item:hover { background: #2f71cd; color: white; }
+        .xp-start-right .start-item { font-weight: bold; color: #003399; margin-bottom: 2px; }
+
+        .xp-start-footer {
+            height: 40px;
+            background: var(--xp-window-title);
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding: 0 10px;
+            gap: 10px;
+        }
+
+        .taskbar-item {
+            background: #3a82f7; border: 1px solid #0046d5; color: white; height: 24px;
+            padding: 0 10px; margin-left: 5px; border-radius: 2px; display: flex; align-items: center;
+            font-size: 11px; min-width: 100px; max-width: 160px; cursor: pointer;
+            box-shadow: inset 0 1px 1px rgba(255,255,255,0.3);
+        }
+        .taskbar-item.active { background: #1d5299; box-shadow: inset 0 0 5px rgba(0,0,0,0.5); border-color: #163a6b; }
+
+        .xp-login-user-card {
+            display: flex; align-items: center; padding: 12px; border-radius: 6px;
+            cursor: pointer; transition: background 0.2s;
+        }
+        .xp-login-user-card:hover { background: rgba(255,255,255,0.15); }
+        .xp-login-user-card img { width: 56px; height: 56px; border: 2px solid #fff; border-radius: 4px; margin-right: 18px; box-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
+        .xp-login-user-name { color: #fff; font-size: 18px; font-weight: bold; text-shadow: 1px 1px 2px rgba(0,0,0,0.5); }
+        
+        .xp-logo-text { font-family: 'Tahoma', sans-serif; font-weight: bold; }
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+    </style>
+<script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@^19.2.3",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "vite": "https://esm.sh/vite@^7.3.1",
+    "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.2"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+<body>
+    <div id="root"></div>
+    <!-- Explicit module import for Vite and deployment environments -->
+    <script type="module" src="/index.tsx"></script>
+</body>
+</html>
